@@ -353,7 +353,10 @@ void outputLCD() {
   lcd.setCursor(0, 0);
   lcd.print("BT: ");
   lcd.print(BT, DP);
-  lcd.print(" *C");
+  lcd.print("*C");
+  lcd.setCursor(12, 0);
+  lcd.print("RP:"); // RoastPhase
+  lcd.print(RoastPhase);
   lcd.setCursor(0, 1);
   lcd.print("Heating: ");
   lcd.print(pidOutput, DP);
