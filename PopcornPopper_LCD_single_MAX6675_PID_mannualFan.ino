@@ -1,5 +1,5 @@
 /**************************************
- * Version: 0820
+ * Version: 0823
  * Add Serial port command (from Roastlogger) control
  **************************************/
  
@@ -28,7 +28,7 @@ double I = 0.4;                                      //I term
 double D = 5;                                         //D term
 // pid control based on BT
 double P2 = 1.0;                                      //P term, lower heating rate
-double I2 = 0.01;                                      //I term, lower heating rate
+double I2 = 0.008;                                      //I term, lower heating rate
 double D2 = 0.0;                                       //D term, lower heating rate
 
 PID myPID(&Input, &pidOutput, &Setpoint, P, I, D, DIRECT);  // higher temperature rising rate
@@ -491,5 +491,6 @@ void loop(){
     if (pidOn == 0) {
       digitalWrite(heaterPin, LOW);
       pidOutput = 0;
+      outputLCD();
   }
 }
