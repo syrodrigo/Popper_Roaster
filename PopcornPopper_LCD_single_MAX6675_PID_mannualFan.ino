@@ -491,6 +491,6 @@ void loop(){
     if (pidOn == 0) {
       digitalWrite(heaterPin, LOW);
       pidOutput = 0;
-      outputLCD();
+
   }
 }
