@@ -417,7 +417,7 @@ void setup()
   lcd.setCursor(1, 0);
   lcd.print("Popper Roaster");
   lcd.setCursor(4, 1);
-  lcd.print("ver.0820");
+  lcd.print("ver.0823");
   delay(3000);
   
   //turn PID on
@@ -453,7 +453,7 @@ void loop(){
       do250msLoop();
     }
 
-    if (t1 > dryTemp && t1 <= dropTemp) RoastPhase = 2;
+    if (t1 > dryTemp && t1 <= dropTemp && RoastPhase == 1) RoastPhase = 2;
     calcTempSlope();
     
     if (pidOn == 1) {
