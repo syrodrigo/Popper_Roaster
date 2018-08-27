@@ -1,5 +1,5 @@
 /**************************************
- * Version: 0823
+ * Version: 0827
  * Add Serial port command (from Roastlogger) control
  **************************************/
  
@@ -25,10 +25,10 @@ double pidOutput = 0;                            //use as %, 100 is always on, 0
 // pid control based on RoR
 double P = 30;                                         //P term
 double I = 0.4;                                      //I term
-double D = 5;                                         //D term
+double D = 10;                                         //D term
 // pid control based on BT
 double P2 = 1.0;                                      //P term, lower heating rate
-double I2 = 0.008;                                      //I term, lower heating rate
+double I2 = 0.009;                                      //I term, lower heating rate
 double D2 = 0.0;                                       //D term, lower heating rate
 
 PID myPID(&Input, &pidOutput, &Setpoint, P, I, D, DIRECT);  // higher temperature rising rate
@@ -417,7 +417,7 @@ void setup()
   lcd.setCursor(1, 0);
   lcd.print("Popper Roaster");
   lcd.setCursor(4, 1);
-  lcd.print("ver.0823");
+  lcd.print("ver.0827");
   delay(3000);
   
   //turn PID on
