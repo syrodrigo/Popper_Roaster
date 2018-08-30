@@ -1,5 +1,5 @@
 /**************************************
- * Version: 0827
+ * Version: 0831
  * Add Serial port command (from Roastlogger) control
  **************************************/
  
@@ -17,7 +17,11 @@ const int SCKa = 3;    // SCKa pin on MAX6675
 const int CS1 = 6;    // CS (chip 1 select) pin on MAX6675
 
 // set the LCD address to 0x27 for a 16 chars and 2 line display
-LiquidCrystal_I2C lcd(0x27,20,4);  
+LiquidCrystal_I2C lcd(0x27,20,4);
+
+// set the Interrupt pins
+const int StartPin = 11;
+const int CoolPin = 12;
 
 // PID controller
 double Input, Setpoint;                          // parameters for PID
@@ -396,6 +400,28 @@ void do250msLoop()
 }
 
 /*****************************************************************
+ * call interrupt
+ * manul start rasting or cooling
+ *****************************************************************/
+
+void startRoast()
+{
+    if (RoastPhase == 0 && t1 < 60) {
+        RoastPhase = 1;
+        pidOn = 1;
+    }
+
+}
+
+void cooling(){
+    if (RoastPhase != 0) {
+        RoastPhase = 0;
+        pidOn = 0;
+    }
+
+}
+
+/*****************************************************************
  * Initializing Arduino
  *****************************************************************/
 
@@ -417,7 +443,7 @@ void setup()
   lcd.setCursor(1, 0);
   lcd.print("Popper Roaster");
   lcd.setCursor(4, 1);
-  lcd.print("ver.0827");
+  lcd.print("ver.0831");
   delay(3000);
   
   //turn PID on
@@ -434,6 +460,12 @@ void setup()
   
   startTime = millis();    // start counting roasting time in miliseconds
   lastTimePeriod = startTime;  // counting PWM period in minutes
+
+  // setup interrupt pins
+  pinMode(StartPin, INPUT_PULLUP);
+  pinMode(CoolPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(StartPin), startRoast, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(CoolPin), cooling, CHANGE);
 }
 
 /****************************************************************************
