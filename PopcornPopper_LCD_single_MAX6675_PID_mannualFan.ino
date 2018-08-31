@@ -29,10 +29,10 @@ double pidOutput = 0;                            //use as %, 100 is always on, 0
 // pid control based on RoR
 double P = 30;                                         //P term
 double I = 0.4;                                      //I term
-double D = 10;                                         //D term
+double D = 8;                                         //D term
 // pid control based on BT
 double P2 = 1.0;                                      //P term, lower heating rate
-double I2 = 0.009;                                      //I term, lower heating rate
+double I2 = 0.008;                                      //I term, lower heating rate
 double D2 = 0.0;                                       //D term, lower heating rate
 
 PID myPID(&Input, &pidOutput, &Setpoint, P, I, D, DIRECT);  // higher temperature rising rate
@@ -93,7 +93,7 @@ const float dryTemp = 150.0; // previously setting: 170.0
 float lastTemp = 0.0;
 float tempSlope = 0.0;
 float DryTempSlope = 0.6; // set bean dry temperature rising rate to 17.5 per minute (total drying time is about 8 minutes)
-const float dropTemp = 220; // should not over 230, avoid too much oil
+const float dropTemp = 230; // should not over 230, avoid too much oil
 int RoastPhase = 0;         // Roast phase 1: drying; 2:Maillard + Develpment
 
 // Heating variables
@@ -406,7 +406,17 @@ void do250msLoop()
 
 void startRoast()
 {
+    if (t1 > 60) {
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("  BT too high!");
+        delay(3000);    
+      }
     if (RoastPhase == 0 && t1 < 60) {
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Start Roasting!");
+        delay(3000);
         RoastPhase = 1;
         pidOn = 1;
     }
@@ -417,6 +427,10 @@ void cooling(){
     if (RoastPhase != 0) {
         RoastPhase = 0;
         pidOn = 0;
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("   Cooling!");
+        delay(3000);
     }
 
 }
@@ -464,8 +478,8 @@ void setup()
   // setup interrupt pins
   pinMode(StartPin, INPUT_PULLUP);
   pinMode(CoolPin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(StartPin), startRoast, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(CoolPin), cooling, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(StartPin), startRoast, LOW);
+  attachInterrupt(digitalPinToInterrupt(CoolPin), cooling, LOW);
 }
 
 /****************************************************************************
