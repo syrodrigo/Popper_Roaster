@@ -76,7 +76,7 @@ int pidOn = 0;                       // state of pid control
 // loop control variables
 unsigned long lastTCTimerLoop = 0;        // for timing the thermocouple loop
 int tcLoopCount = 0;                  // counter to run serial output once every 4 loops of 250 ms t/c loop
-int startTime = 0;            //roasting start
+int startTime = 0;            //timestamp of start roasting
 
 int controlBy = arduino;              // default is arduino control. PC sends "pccontrol" to gain control or
                                       // swapped back to Arduino control if PC sends "arduinocontrol"
@@ -91,6 +91,7 @@ double pidBias = 0;
 // coffee roasting profile
 const float dryTemp = 150.0; // previously setting: 170.0
 float lastTemp = 0.0;
+float startTemp = 0.0; // signature of temperature when start roasting
 float tempSlope = 0.0;
 float DryTempSlope = 0.6; // set bean dry temperature rising rate to 17.5 per minute (total drying time is about 8 minutes)
 const float dropTemp = 230; // should not over 230, avoid too much oil
@@ -213,8 +214,8 @@ void calcTempSlope(){                   // units in *C/second
   if (tempUpdateCounter - lastTempUpdateCounter > 0 && (tempUpdateCounter - lastTempUpdateCounter) % 2 == 0)
     {
       lastTempUpdateCounter = tempUpdateCounter;
-      tempSlope = (t1 - lastTemp) * 1000 / 2000;  // 2 seconds per cycle
-      lastTemp = t1;
+      tempSlope = (t1 - startTemp) * 1000 / (millis() - startTime);  // 2 seconds per cycle
+
     }
 }
 
@@ -280,6 +281,8 @@ void doInputCommand()
     if (inString.equals("load")) {
       pidOn = 1;
       RoastPhase = 1;
+      startTime = millis();
+      startTemp = t1;
     }
     if (inString.equals("eject")) {
       pidOn = 0;
@@ -419,6 +422,8 @@ void startRoast()
         delay(3000);
         RoastPhase = 1;
         pidOn = 1;
+        startTime = millis();
+        startTemp = t1;
     }
 
 }
@@ -472,7 +477,6 @@ void setup()
   // setup HeaterPin
   setupHeater();
   
-  startTime = millis();    // start counting roasting time in miliseconds
   lastTimePeriod = startTime;  // counting PWM period in minutes
 
   // setup interrupt pins
