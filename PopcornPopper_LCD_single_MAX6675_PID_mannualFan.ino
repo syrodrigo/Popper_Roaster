@@ -1,5 +1,5 @@
 /**************************************
- * Version: 0831
+ * Version: 0903
  * Add Serial port command (from Roastlogger) control
  **************************************/
  
@@ -12,16 +12,14 @@
 #define maxLength 30                  // maximum length for strings used
 
 // thermocouple reading Max 6675 pins
-const int SO  = 2;    // SO pin on MAX6675
-const int SCKa = 3;    // SCKa pin on MAX6675
+const int SO  = 4;    // SO pin on MAX6675
+const int SCKa = 5;    // SCKa pin on MAX6675
 const int CS1 = 6;    // CS (chip 1 select) pin on MAX6675
 
 // set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27,20,4);
 
-// set the Interrupt pins
-const int StartPin = 11;
-const int CoolPin = 12;
+
 
 // PID controller
 double Input, Setpoint;                          // parameters for PID
@@ -410,16 +408,16 @@ void do250msLoop()
 void startRoast()
 {
     if (t1 > 60) {
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("  BT too high!");
-        delay(3000);    
+        //lcd.clear();
+        //lcd.setCursor(0, 0);
+        //lcd.print("  BT too high!");
+        //delay(3000);    
       }
     if (RoastPhase == 0 && t1 < 60) {
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("Start Roasting!");
-        delay(3000);
+        //lcd.clear();
+        //lcd.setCursor(0, 0);
+        //lcd.print("Start Roasting!");
+        //delay(3000);
         RoastPhase = 1;
         pidOn = 1;
         startTime = millis();
@@ -428,16 +426,16 @@ void startRoast()
 
 }
 
-void cooling(){
+void cooling()
+{
     if (RoastPhase != 0) {
         RoastPhase = 0;
         pidOn = 0;
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("   Cooling!");
-        delay(3000);
+       // lcd.clear();
+       // lcd.setCursor(0, 0);
+       // lcd.print("   Cooling!");
+       // delay(3000);
     }
-
 }
 
 /*****************************************************************
@@ -462,7 +460,7 @@ void setup()
   lcd.setCursor(1, 0);
   lcd.print("Popper Roaster");
   lcd.setCursor(4, 1);
-  lcd.print("ver.0831");
+  lcd.print("ver.0903");
   delay(3000);
   
   //turn PID on
@@ -478,12 +476,11 @@ void setup()
   setupHeater();
   
   lastTimePeriod = startTime;  // counting PWM period in minutes
-
   // setup interrupt pins
-  pinMode(StartPin, INPUT_PULLUP);
-  pinMode(CoolPin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(StartPin), startRoast, LOW);
-  attachInterrupt(digitalPinToInterrupt(CoolPin), cooling, LOW);
+  pinMode(2, INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP);
+  attachInterrupt(1, startRoast, LOW);
+  attachInterrupt(0, cooling, LOW);
 }
 
 /****************************************************************************
