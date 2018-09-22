@@ -1,5 +1,5 @@
 /**************************************
- * Version: 0903
+ * Version: 1.0
  * Add Serial port command (from Roastlogger) control
  **************************************/
  
@@ -30,7 +30,7 @@ double I = 0.4;                                      //I term
 double D = 8;                                         //D term
 // pid control based on BT
 double P2 = 1.0;                                      //P term, lower heating rate
-double I2 = 0.008;                                      //I term, lower heating rate
+double I2 = 0.007;                                      //I term, lower heating rate
 double D2 = 0.0;                                       //D term, lower heating rate
 
 PID myPID(&Input, &pidOutput, &Setpoint, P, I, D, DIRECT);  // higher temperature rising rate
@@ -91,8 +91,8 @@ const float dryTemp = 150.0; // previously setting: 170.0
 float lastTemp = 0.0;
 float startTemp = 0.0; // signature of temperature when start roasting
 float tempSlope = 0.0;
-float DryTempSlope = 0.6; // set bean dry temperature rising rate to 17.5 per minute (total drying time is about 8 minutes)
-const float dropTemp = 230; // should not over 230, avoid too much oil
+float DryTempSlope = 0.7; // (0.6) set bean dry temperature rising rate to 17.5 per minute (total drying time is about 8 minutes)
+const float dropTemp = 235; // should not over 230, avoid too much oil
 int RoastPhase = 0;         // Roast phase 1: drying; 2:Maillard + Develpment
 
 // Heating variables
@@ -460,7 +460,7 @@ void setup()
   lcd.setCursor(1, 0);
   lcd.print("Popper Roaster");
   lcd.setCursor(4, 1);
-  lcd.print("ver.0903");
+  lcd.print("ver 1.0");
   delay(3000);
   
   //turn PID on
