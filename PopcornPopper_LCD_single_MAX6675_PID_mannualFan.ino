@@ -1,6 +1,7 @@
 /**************************************
+ * 
  * Version: 1.0
- * Add Serial port command (from Roastlogger) control
+ * 
  **************************************/
  
 #include <Wire.h>
