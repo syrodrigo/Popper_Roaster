@@ -30,8 +30,8 @@ double P = 30;                                         //P term
 double I = 0.4;                                      //I term
 double D = 8;                                         //D term
 // pid control based on BT
-double P2 = 1.0;                                      //P term, lower heating rate
-double I2 = 0.007;                                      //I term, lower heating rate
+double P2 = 0.8;                                      //P term, lower heating rate
+double I2 = 0.006;                                      //I term, lower heating rate
 double D2 = 0.0;                                       //D term, lower heating rate
 
 PID myPID(&Input, &pidOutput, &Setpoint, P, I, D, DIRECT);  // higher temperature rising rate
