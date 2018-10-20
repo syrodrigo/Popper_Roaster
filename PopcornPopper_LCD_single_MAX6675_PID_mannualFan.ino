@@ -26,12 +26,12 @@ LiquidCrystal_I2C lcd(0x27,20,4);
 double Input, Setpoint;                          // parameters for PID
 double pidOutput = 0;                            //use as %, 100 is always on, 0 is always off
 // pid control based on RoR
-double P = 30;                                         //P term
+double P = 33;                                         //P term
 double I = 0.4;                                      //I term
 double D = 8;                                         //D term
 // pid control based on BT
 double P2 = 0.8;                                      //P term, lower heating rate
-double I2 = 0.006;                                      //I term, lower heating rate
+double I2 = 0.005;                                      //I term, lower heating rate
 double D2 = 0.0;                                       //D term, lower heating rate
 
 PID myPID(&Input, &pidOutput, &Setpoint, P, I, D, DIRECT);  // higher temperature rising rate
