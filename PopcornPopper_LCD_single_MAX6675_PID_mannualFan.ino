@@ -92,7 +92,7 @@ const float dryTemp = 150.0; // previously setting: 170.0
 float lastTemp = 0.0;
 float startTemp = 0.0; // signature of temperature when start roasting
 float tempSlope = 0.0;
-float DryTempSlope = 0.7; // (0.6) set bean dry temperature rising rate to 17.5 per minute (total drying time is about 8 minutes)
+float DryTempSlope = 0.7 * 1.5; // (0.6) set bean dry temperature rising rate to 17.5 per minute (total drying time is about 8 minutes)
 const float dropTemp = 235; // should not over 230, avoid too much oil
 int RoastPhase = 0;         // Roast phase 1: drying; 2:Maillard + Develpment
 
